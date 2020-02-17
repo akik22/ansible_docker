@@ -1,0 +1,25 @@
+---
+- hosts: dockTest
+  become: yes
+  
+  tasks:
+    - name: Patching
+      yum: name=* update_cache=yes state=latest
+    
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+    
+    - name: Uninstalling old versions
+      yum:
+        state: absent
+        name:
+            - docker
+            - docker-client
+            - docker-client-latest
+            - docker-common
+            - docker-latest
+            - docker-latest-logrotate
+            - docker-logrotate
+            - docker-engine
+            
