@@ -43,6 +43,7 @@
         creates: /etc/yum.repos.d/docker-ce.repo
 
     - yum:
+        update_cache : yes
         state: latest
         name:
             - docker-ce 
@@ -51,3 +52,22 @@
     
     - name: Starting and Enabling Docker
       service: name=docker state=started enabled=yes
+    
+    - name: Installing Docker Compose
+      shell: curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+
+    - file: dest=/usr/local/bin/docker-compose mode=a+x
+
+    - file:
+        src: /usr/local/bin/docker-compose
+        dest: /usr/bin/docker-compose
+        state: link
+    
+    - name: Installing Docker Bash Completion
+      shell: curl -L https://raw.githubusercontent.com/docker/compose/1.25.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
+      args:
+        creates: /etc/bash_completion.d/docker-compose
+
+    - shell: source /etc/bash_completion.d/docker-compose
