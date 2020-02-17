@@ -1,3 +1,10 @@
+# Author: Akik
+# Email:  akik22@gmail.com
+# ReadMe: This script is for Installing Docker. Tested on CentOS7 but not tested on CentOS8.
+#         Run this script from Ansible. Add the desired hosts on ansible and then run it. Modification/Changes/Constructive criticism are welcome
+#         This will patch your system first so be patient at first.
+#         Ansible User should have sudo permissions with no password facility
+
 ---
 - hosts: dockTest
   become: yes
@@ -10,7 +17,7 @@
       selinux:
         state: disabled
     
-    - name: Uninstalling old versions
+    - name: Uninstalling old versions of docker
       yum:
         state: absent
         name:
@@ -37,7 +44,7 @@
       
     - shell: source /etc/profile.d/bash_completion.sh
 
-    - name: Installing Docker
+    - name: Installing, Starting and Enabling Docker
       shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
       args:
         creates: /etc/yum.repos.d/docker-ce.repo
@@ -50,8 +57,7 @@
             - docker-ce-cli 
             - containerd.io
     
-    - name: Starting and Enabling Docker
-      service: name=docker state=started enabled=yes
+    - service: name=docker state=started enabled=yes
     
     - name: Installing Docker Compose
       shell: curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
