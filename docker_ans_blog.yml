@@ -23,3 +23,16 @@
             - docker-logrotate
             - docker-engine
             
+    - name: Installing Prerequisites 
+      yum:
+        state: latest
+        name:
+            - yum-utils
+            - device-mapper-persistent-data
+            - lvm2
+            - bash-completion 
+            - curl
+            - wget
+            - telnet
+      
+    - shell: source /etc/profile.d/bash_completion.sh
