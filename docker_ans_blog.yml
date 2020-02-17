@@ -36,3 +36,18 @@
             - telnet
       
     - shell: source /etc/profile.d/bash_completion.sh
+
+    - name: Installing Docker
+      shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      args:
+        creates: /etc/yum.repos.d/docker-ce.repo
+
+    - yum:
+        state: latest
+        name:
+            - docker-ce 
+            - docker-ce-cli 
+            - containerd.io
+    
+    - name: Starting and Enabling Docker
+      service: name=docker state=started enabled=yes
